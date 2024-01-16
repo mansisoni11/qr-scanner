@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body data-rsssl=1>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(308deg, #1b1d1c, #5f6461, #95939e, #d9d7e3);
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 23s ease infinite;
+    -moz-animation: AnimationName 23s ease infinite;
+    animation: AnimationName 23s ease infinite;
+  }
+
+  @-webkit-keyframes AnimationName {
+    0%{background-position:15% 0%}
+    50%{background-position:86% 100%}
+    100%{background-position:15% 0%}
+  }
+  @-moz-keyframes AnimationName {
+    0%{background-position:15% 0%}
+    50%{background-position:86% 100%}
+    100%{background-position:15% 0%}
+  }
+  @keyframes AnimationName {
+    0%{background-position:15% 0%}
+    50%{background-position:86% 100%}
+    100%{background-position:15% 0%}
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+  #reader-container {
+    width: 70%;
+    margin: 20px;
+ /* Mirror the camera feed */
+  }
+
+  #reader {
+    width: 100%;
+  }
+
+  #result {
+    width: 70%;
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  #html5-qrcode-button-camera-stop{
+    transform: scaleX(1);
+  }
+  #reader__scan_region{
+    transform: scaleX(-1);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  #closeButton {
+    margin-top: 20px;
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+    display: none;
+  }
+
+  #closeButton:hover {
+    color: darkblue;
+  }
+</style>
+
+<main>
+  <div id="reader-container">
+    <div id="reader"></div>
+    <div id="result"></div>
+  </div>
+  <div id="closeButton" onclick="closeWindow()">Close</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  const scanner = new Html5QrcodeScanner('reader', {
+    qrbox: {
+      width: 250,
+      height: 250,
+      
+    },
+    fps: 20,
+  });
+
+  let openedWindow;
+  let scanningInProgress = false;
+
+  scanner.render(success, error);
+
+  function success(result) {
+    
+    if (!scanningInProgress) {
+      scanningInProgress = true;
+
+      openedWindow = window.open(result, '_blank');
+      showCloseButton();
+
+      // Automatically close the window after 30 seconds
+      setTimeout(function () {
+        closeAndRedirect();
+        scanningInProgress = false;
+      }, 5000); // 5 seconds
+    }
+  }
+
+  function error(err) {
+    console.error(err);
+  }
+
+  // Function to show the close button
+  function showCloseButton() {
+    const closeButton = document.getElementById('closeButton');
+    if (closeButton) {
+      closeButton.style.display = 'block';
+    }
+  }
+
+  // Function to close the opened window and redirect to index.html
+  function closeAndRedirect() {
+    if (openedWindow && !openedWindow.closed) {
+      openedWindow.close();
+    }
+    // Redirect to index.html
+    window.location.href = 'index.html';
+  }
+
+  // Function to close the opened window manually
+  function closeWindow() {
+    closeAndRedirect();
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
